@@ -1,0 +1,1048 @@
+`html
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LAVO | One Bag, Many Purposes</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lavo: {
+              cream: '#FAF7F2',
+              creamDark: '#F2EDE4',
+              sage: '#BAC8B3',
+              sageLight: '#EBF0E9',
+              olive: '#4D614A',
+              oliveDark: '#354333',
+              charcoal: '#212529',
+              muted: '#727970'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF7F2;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #BAC8B3;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #4D614A;
+    }
+
+    .glass-nav {
+      background: rgba(250, 247, 242, 0.85);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="bg-lavo-cream text-lavo-charcoal font-sans antialiased overflow-x-hidden selection:bg-lavo-sage selection:text-lavo-oliveDark">
+
+  <!-- ================= NOTIFICATION TOAST ================= -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 bg-lavo-oliveDark text-white px-5 py-3.5 rounded-2xl shadow-xl flex items-center space-x-3 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none">
+    <i class="fa-solid fa-circle-check text-lavo-sage text-lg"></i>
+    <span id="toast-message" class="text-sm font-medium">Item berhasil ditambahkan</span>
+  </div>
+
+  <!-- ================= A. NAVBAR ================= -->
+  <header class="fixed top-0 left-0 right-0 z-40 glass-nav border-b border-lavo-creamDark transition-all duration-300" id="main-header">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+           <!-- Brand Logo -->
+      <a href="#home" class="flex items-center space-x-3 group">
+        <img 
+          src="logo lavo.png" 
+          alt="LAVO Logo" 
+          class="w-11 h-11 object-contain rounded-xl transition-transform duration-300 group-hover:scale-105"
+        />
+        <span class="font-serif text-2xl font-bold tracking-[0.2em] text-lavo-oliveDark">LAVO</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex items-center space-x-9 text-sm font-medium tracking-wide text-lavo-oliveDark">
+        <a href="#home" class="hover:text-lavo-olive transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-lavo-olive hover:after:w-full after:transition-all">Home</a>
+        <a href="#products" class="hover:text-lavo-olive transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-lavo-olive hover:after:w-full after:transition-all">Products</a>
+        <a href="#about" class="hover:text-lavo-olive transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-lavo-olive hover:after:w-full after:transition-all">About Us</a>
+        <a href="#values" class="hover:text-lavo-olive transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-lavo-olive hover:after:w-full after:transition-all">Values</a>
+        <a href="#contact" class="hover:text-lavo-olive transition-colors relative py-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-lavo-olive hover:after:w-full after:transition-all">Contact</a>
+      </nav>
+
+      <!-- Cart Button & Mobile Menu Trigger -->
+      <div class="flex items-center space-x-4">
+        <!-- Shopping Cart Icon -->
+        <button onclick="toggleCart()" class="relative p-2.5 rounded-full hover:bg-lavo-creamDark transition text-lavo-oliveDark" aria-label="Shopping Cart">
+          <i class="fa-solid fa-bag-shopping text-xl"></i>
+          <span id="cart-badge" class="absolute top-1 right-1 bg-lavo-olive text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center scale-0 transition-transform duration-300">0</span>
+        </button>
+
+        <!-- Mobile Hamburger Button -->
+        <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-lavo-oliveDark focus:outline-none">
+          <i class="fa-solid fa-bars-staggered text-xl"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Mobile Navigation Drawer -->
+    <div id="mobile-menu" class="hidden md:hidden px-6 pt-2 pb-6 border-b border-lavo-creamDark bg-lavo-cream space-y-3 font-medium text-sm">
+      <a href="#home" onclick="toggleMobileMenu()" class="block py-2 text-lavo-oliveDark hover:text-lavo-olive">Home</a>
+      <a href="#products" onclick="toggleMobileMenu()" class="block py-2 text-lavo-oliveDark hover:text-lavo-olive">Products</a>
+      <a href="#about" onclick="toggleMobileMenu()" class="block py-2 text-lavo-oliveDark hover:text-lavo-olive">About Us</a>
+      <a href="#values" onclick="toggleMobileMenu()" class="block py-2 text-lavo-oliveDark hover:text-lavo-olive">Brand Values</a>
+      <a href="#contact" onclick="toggleMobileMenu()" class="block py-2 text-lavo-oliveDark hover:text-lavo-olive">Contact</a>
+    </div>
+  </header>
+
+  <!-- ================= B. HERO SECTION ================= -->
+  <section id="home" class="min-h-screen pt-32 pb-20 flex items-center relative overflow-hidden">
+    <!-- Decorative Ambient Glows -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-lavo-sage/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/2 -right-32 w-96 h-96 bg-lavo-creamDark rounded-full blur-2xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      
+      <!-- Text Area -->
+      <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
+        <div class="inline-flex items-center space-x-2 bg-lavo-sageLight border border-lavo-sage/40 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider text-lavo-olive uppercase">
+          <span class="w-2 h-2 rounded-full bg-lavo-olive animate-pulse"></span>
+          <span>New Essential Collection 2025</span>
+        </div>
+
+        <h1 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-lavo-oliveDark leading-[1.15]">
+          One Bag.<br/>
+          <span class="italic font-normal text-lavo-olive">Many Purposes.</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-lavo-muted max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal">
+          Satu tas untuk berbagai kebutuhan Anda. Dirancang secara cermat memadukan fleksibilitas, estetika minimalis, dan kepraktisan untuk kuliah, kerja, hingga laundry harian.
+        </p>
+
+        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+          <a href="#products" class="w-full sm:w-auto px-8 py-4 rounded-full bg-lavo-olive text-white font-medium text-sm tracking-wide hover:bg-lavo-oliveDark transition-all duration-300 shadow-lg shadow-lavo-olive/20 hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center space-x-3">
+            <span>Shop Collection</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </a>
+          <a href="#about" class="w-full sm:w-auto px-8 py-4 rounded-full border border-lavo-olive/30 text-lavo-oliveDark font-medium text-sm tracking-wide hover:bg-lavo-creamDark transition duration-300 text-center">
+            Pelajari Filosofi Kami
+          </a>
+        </div>
+
+        <!-- Highlight Bar -->
+        <div class="pt-6 grid grid-cols-3 gap-4 border-t border-lavo-creamDark max-w-lg mx-auto lg:mx-0">
+          <div>
+            <p class="font-serif text-2xl font-bold text-lavo-oliveDark">100%</p>
+            <p class="text-xs text-lavo-muted">Premium Cotton Canvas</p>
+          </div>
+          <div>
+            <p class="font-serif text-2xl font-bold text-lavo-oliveDark">2-in-1</p>
+            <p class="text-xs text-lavo-muted">Multipurpose Design</p>
+          </div>
+          <div>
+            <p class="font-serif text-2xl font-bold text-lavo-oliveDark">Eco</p>
+            <p class="text-xs text-lavo-muted">Sustainable Living</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Visual -->
+      <div class="lg:col-span-5 relative">
+        <div class="relative mx-auto max-w-md lg:max-w-none">
+          <!-- Main Product Frame -->
+          <div class="aspect-[4/5] rounded-[2.5rem] overflow-hidden bg-lavo-creamDark shadow-2xl relative border-4 border-white">
+            <img 
+              src="https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=900&q=80" 
+              alt="LAVO Hero Tote Bag" 
+              class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-lavo-oliveDark/40 via-transparent to-transparent"></div>
+            
+            <!-- Floating Aesthetic Tag -->
+            <div class="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-lg border border-white/50 flex items-center justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-lavo-olive">Signature Model</p>
+                <p class="font-serif text-base font-bold text-lavo-oliveDark">Everyday Convertible Tote</p>
+              </div>
+              <span class="text-sm font-semibold text-lavo-charcoal">Rp 219.000</span>
+            </div>
+          </div>
+
+          <!-- Small Floating Detail Card -->
+          <div class="hidden sm:flex absolute -bottom-6 -left-8 bg-lavo-cream border border-lavo-sage/40 p-4 rounded-2xl shadow-xl items-center space-x-3.5 max-w-xs">
+            <div class="w-10 h-10 rounded-full bg-lavo-sageLight flex items-center justify-center text-lavo-olive">
+              <i class="fa-solid fa-feather-pointed"></i>
+            </div>
+            <div>
+              <p class="text-xs font-bold text-lavo-oliveDark">Ultra Lightweight</p>
+              <p class="text-[11px] text-lavo-muted">Kuat menampung beban hingga 12kg</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= E. BRAND VALUES ================= -->
+  <section id="values" class="py-20 bg-white/60 border-y border-lavo-creamDark">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-bold tracking-widest text-lavo-olive uppercase">Our Foundations</span>
+        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-lavo-oliveDark mt-2">Empat Nilai Utama LAVO</h2>
+        <p class="text-sm text-lavo-muted mt-3">Setiap jahitan dan pola yang kami ciptakan berpegang teguh pada prinsip fungsionalitas murni.</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- 1. Multifunctional -->
+        <div class="p-8 rounded-3xl bg-lavo-cream border border-lavo-creamDark hover:border-lavo-sage transition-all duration-300 hover:-translate-y-1.5 group">
+          <div class="w-14 h-14 rounded-2xl bg-lavo-sageLight text-lavo-olive flex items-center justify-center text-2xl mb-6 group-hover:bg-lavo-olive group-hover:text-white transition-colors">
+            <i class="fa-solid fa-shapes"></i>
+          </div>
+          <h3 class="font-serif text-xl font-bold text-lavo-oliveDark mb-2.5">1. Multifunctional</h3>
+          <p class="text-sm text-lavo-muted leading-relaxed">
+            Satu tas dapat beralih fungsi dengan mulus; dari tas belanja, tas kuliah, hingga wadah pakaian kotor saat bepergian.
+          </p>
+        </div>
+
+        <!-- 2. Practical -->
+        <div class="p-8 rounded-3xl bg-lavo-cream border border-lavo-creamDark hover:border-lavo-sage transition-all duration-300 hover:-translate-y-1.5 group">
+          <div class="w-14 h-14 rounded-2xl bg-lavo-sageLight text-lavo-olive flex items-center justify-center text-2xl mb-6 group-hover:bg-lavo-olive group-hover:text-white transition-colors">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+          </div>
+          <h3 class="font-serif text-xl font-bold text-lavo-oliveDark mb-2.5">2. Practical</h3>
+          <p class="text-sm text-lavo-muted leading-relaxed">
+            Dilengkapi kompartemen cerdas, mudah dicuci, dan gampang disimpan tanpa menyita ruang berlebih di kamar atau lemari.
+          </p>
+        </div>
+
+        <!-- 3. Flexible -->
+        <div class="p-8 rounded-3xl bg-lavo-cream border border-lavo-creamDark hover:border-lavo-sage transition-all duration-300 hover:-translate-y-1.5 group">
+          <div class="w-14 h-14 rounded-2xl bg-lavo-sageLight text-lavo-olive flex items-center justify-center text-2xl mb-6 group-hover:bg-lavo-olive group-hover:text-white transition-colors">
+            <i class="fa-solid fa-arrows-split-up-and-left"></i>
+          </div>
+          <h3 class="font-serif text-xl font-bold text-lavo-oliveDark mb-2.5">3. Flexible</h3>
+          <p class="text-sm text-lavo-muted leading-relaxed">
+            Bahan yang fleksibel dan tali yang ergonomis dapat disesuaikan untuk kenyamanan bahu dalam aktivitas seharian.
+          </p>
+        </div>
+
+        <!-- 4. Efficient -->
+        <div class="p-8 rounded-3xl bg-lavo-cream border border-lavo-creamDark hover:border-lavo-sage transition-all duration-300 hover:-translate-y-1.5 group">
+          <div class="w-14 h-14 rounded-2xl bg-lavo-sageLight text-lavo-olive flex items-center justify-center text-2xl mb-6 group-hover:bg-lavo-olive group-hover:text-white transition-colors">
+            <i class="fa-solid fa-leaf"></i>
+          </div>
+          <h3 class="font-serif text-xl font-bold text-lavo-oliveDark mb-2.5">4. Efficient</h3>
+          <p class="text-sm text-lavo-muted leading-relaxed">
+            Menghemat pengeluaran dan mengurangi sampah kantong plastik dengan solusi satu tas tahan lama untuk bertahun-tahun.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= C. PRODUCT SECTION ================= -->
+  <section id="products" class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <!-- Section Header -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="text-xs font-bold tracking-widest text-lavo-olive uppercase">Curated Catalog</span>
+          <h2 class="font-serif text-3xl sm:text-4xl font-bold text-lavo-oliveDark mt-2">Katalog Tas Multifungsi</h2>
+          <p class="text-sm text-lavo-muted mt-2">Temukan teman setia untuk melengkapi mobilitas harian Anda.</p>
+        </div>
+
+        <!-- Filter Tags -->
+        <div class="flex flex-wrap gap-2 mt-6 md:mt-0" id="filter-container">
+          <button onclick="filterProducts('all')" class="filter-btn active px-4 py-2 rounded-full text-xs font-semibold bg-lavo-olive text-white transition">Semua</button>
+          <button onclick="filterProducts('tote')" class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-white text-lavo-charcoal border border-lavo-creamDark hover:bg-lavo-sageLight transition">Tote Bag</button>
+          <button onclick="filterProducts('laundry')" class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-white text-lavo-charcoal border border-lavo-creamDark hover:bg-lavo-sageLight transition">Laundry Bag</button>
+          <button onclick="filterProducts('multi')" class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-white text-lavo-charcoal border border-lavo-creamDark hover:bg-lavo-sageLight transition">Multipurpose</button>
+        </div>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="product-grid">
+        <!-- Rendered via JavaScript -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= D. ABOUT US ================= -->
+  <section id="about" class="py-24 bg-lavo-creamDark/60 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Imagery Grid -->
+        <div class="lg:col-span-6 grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <div class="rounded-3xl overflow-hidden shadow-lg aspect-[3/4]">
+              <img 
+                src="https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=800&q=80" 
+                alt="LAVO Lifestyle" 
+                class="w-full h-full object-cover hover:scale-105 transition duration-500"
+              />
+            </div>
+            <div class="bg-lavo-olive p-6 rounded-3xl text-white">
+              <p class="font-serif text-2xl font-bold">LAVO Concept</p>
+              <p class="text-xs text-lavo-sageLight mt-1">Mengedepankan kesederhanaan fungsi tanpa mengorbankan pesona gaya.</p>
+            </div>
+          </div>
+          <div class="space-y-4 pt-8">
+            <div class="bg-white p-6 rounded-3xl border border-lavo-creamDark shadow-sm">
+              <span class="text-3xl font-serif text-lavo-olive font-bold">01</span>
+              <p class="text-xs font-bold uppercase tracking-wider text-lavo-oliveDark mt-2">Dibuat Lokal</p>
+              <p class="text-xs text-lavo-muted mt-1">Ditenun dan dijahit dengan dedikasi pengrajin lokal berpengalaman.</p>
+            </div>
+            <div class="rounded-3xl overflow-hidden shadow-lg aspect-[3/4]">
+              <img 
+                src="https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=800&q=80" 
+                alt="LAVO Canvas Detail" 
+                class="w-full h-full object-cover hover:scale-105 transition duration-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Story Content -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-block px-3.5 py-1 rounded-full bg-lavo-sageLight text-lavo-olive text-xs font-bold uppercase tracking-wider">
+            Filosofi Kami
+          </div>
+          <h2 class="font-serif text-3xl sm:text-5xl font-bold text-lavo-oliveDark leading-tight">
+            Menemukan Kembali Makna Kesederhanaan Melalui Satu Tas.
+          </h2>
+          <p class="text-sm sm:text-base text-lavo-muted leading-relaxed">
+            Seringkali kita membeli tas berbeda untuk setiap tujuan: tas untuk laptop, tas belanjaan terpisah, dan kantong khusus cucian laundry. Hasilnya adalah tumpukan tas yang jarang dipakai dan membebani ruang hidup kita.
+          </p>
+          <p class="text-sm sm:text-base text-lavo-muted leading-relaxed">
+            <strong class="text-lavo-oliveDark">LAVO</strong> lahir dari pemikiran bahwa satu tas yang dirancang dengan presisi cerdas dapat mendampingi Anda di segala transisi harian. Menggunakan material kanvas ramah lingkungan dengan pelapis antibakteri dan tahan percikan air, LAVO memastikan Anda tetap tampil elegan dari ruang rapat, lorong kampus, kafe favorit, hingga laundromat akhir pekan.
+          </p>
+          
+          <div class="pt-4 grid grid-cols-2 gap-4">
+            <div class="border-l-2 border-lavo-olive pl-4">
+              <p class="font-serif font-bold text-lg text-lavo-oliveDark">Eco-Friendly</p>
+              <p class="text-xs text-lavo-muted">Mengurangi ketergantungan tas sekali pakai.</p>
+            </div>
+            <div class="border-l-2 border-lavo-olive pl-4">
+              <p class="font-serif font-bold text-lg text-lavo-oliveDark">Tahan Lama</p>
+              <p class="text-xs text-lavo-muted">Jahitan ganda reinforced bar-tack di titik beban.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT SECTION ================= -->
+  <section id="contact" class="py-20">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="bg-white rounded-3xl p-8 sm:p-12 shadow-sm border border-lavo-creamDark">
+        <div class="text-center max-w-lg mx-auto mb-10">
+          <span class="text-xs font-bold tracking-widest text-lavo-olive uppercase">Hubungi Kami</span>
+          <h2 class="font-serif text-3xl font-bold text-lavo-oliveDark mt-2">Punya Pertanyaan untuk LAVO?</h2>
+          <p class="text-sm text-lavo-muted mt-2">Tim kami siap membantu memilihkan produk terbaik untuk kebutuhan harian Anda.</p>
+        </div>
+
+        <form onsubmit="handleContactSubmit(event)" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-lavo-muted mb-2">Nama Lengkap</label>
+              <input type="text" required placeholder="Contoh: Amanda Putri" class="w-full px-4 py-3 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-lavo-muted mb-2">Alamat Email</label>
+              <input type="email" required placeholder="amanda@example.com" class="w-full px-4 py-3 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-lavo-muted mb-2">Pesan Anda</label>
+            <textarea rows="4" required placeholder="Tuliskan pertanyaan seputar material, pemesanan kustom, atau ketersediaan produk..." class="w-full px-4 py-3 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm"></textarea>
+          </div>
+          <button type="submit" class="w-full py-4 rounded-xl bg-lavo-olive text-white font-medium text-sm hover:bg-lavo-oliveDark transition duration-300 shadow-md">
+            Kirim Pesan
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= H. FOOTER ================= -->
+  <footer class="bg-lavo-oliveDark text-white pt-16 pb-12 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+        
+        <!-- Brand Info -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full bg-lavo-sage text-lavo-oliveDark flex items-center justify-center font-serif text-lg font-bold">
+              L
+            </div>
+            <span class="font-serif text-2xl font-bold tracking-[0.2em] text-white">LAVO</span>
+          </div>
+          <p class="text-xs text-white/70 max-w-sm leading-relaxed">
+            "One Bag, Many Purposes – Satu Tas untuk Berbagai Kebutuhan." Brand tas multifungsi yang memadukan nilai kepraktisan, estetika modern, dan gaya hidup berkelanjutan.
+          </p>
+          <div class="flex items-center space-x-3 pt-2">
+            <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-lavo-sage hover:text-lavo-oliveDark transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-lavo-sage hover:text-lavo-oliveDark transition"><i class="fa-brands fa-tiktok text-sm"></i></a>
+            <a href="#" class="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-lavo-sage hover:text-lavo-oliveDark transition"><i class="fa-brands fa-whatsapp text-sm"></i></a>
+          </div>
+        </div>
+
+        <!-- Navigation Links -->
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-lavo-sage mb-4">Navigasi</p>
+          <ul class="space-y-2.5 text-xs text-white/70">
+            <li><a href="#home" class="hover:text-white transition">Beranda</a></li>
+            <li><a href="#products" class="hover:text-white transition">Koleksi Tas</a></li>
+            <li><a href="#about" class="hover:text-white transition">Tentang LAVO</a></li>
+            <li><a href="#values" class="hover:text-white transition">Nilai Brand</a></li>
+            <li><a href="#contact" class="hover:text-white transition">Kontak Layanan</a></li>
+          </ul>
+        </div>
+
+        <!-- Collections -->
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-lavo-sage mb-4">Kategori</p>
+          <ul class="space-y-2.5 text-xs text-white/70">
+            <li><a href="#products" class="hover:text-white transition">Everyday Tote</a></li>
+            <li><a href="#products" class="hover:text-white transition">Classic Collection</a></li>
+            <li><a href="#products" class="hover:text-white transition">Campus Essentials</a></li>
+            <li><a href="#products" class="hover:text-white transition">Daily Laundry Bags</a></li>
+            <li><a href="#products" class="hover:text-white transition">Foldable Travel Bag</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Detail -->
+        <div>
+          <p class="text-xs font-bold uppercase tracking-widest text-lavo-sage mb-4">Atelier & Studio</p>
+          <p class="text-xs text-white/70 leading-relaxed mb-3">
+            Jl. Senopati No. 42, Kebayoran Baru, Jakarta Selatan, 12190
+          </p>
+          <p class="text-xs text-white/70">halo@lavobags.id</p>
+          <p class="text-xs text-white/70 mt-1">+62 8389-6639-451</p>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-white/50 space-y-3 sm:space-y-0">
+        <p>&copy; 2025 LAVO Indonesia. Seluruh hak cipta dilindungi.</p>
+        <p class="tracking-wide">Dibuat untuk Presentasi & Demonstrasi Tugas Kuliah.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= F. SHOPPING CART DRAWER ================= -->
+  <div id="cart-drawer-backdrop" onclick="toggleCart()" class="fixed inset-0 bg-lavo-charcoal/40 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+  <div id="cart-drawer" class="fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out">
+    
+    <!-- Drawer Header -->
+    <div class="p-6 border-b border-lavo-creamDark flex items-center justify-between bg-lavo-cream">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-bag-shopping text-lavo-olive"></i>
+        <h3 class="font-serif text-lg font-bold text-lavo-oliveDark">Keranjang Belanja</h3>
+        <span id="drawer-count" class="text-xs bg-lavo-sageLight text-lavo-olive font-bold px-2 py-0.5 rounded-full">0</span>
+      </div>
+      <button onclick="toggleCart()" class="w-8 h-8 rounded-full hover:bg-lavo-creamDark flex items-center justify-center text-lavo-muted hover:text-lavo-charcoal">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <!-- Drawer Body (Items List) -->
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4">
+      <!-- Empty state / Items injected here by JS -->
+    </div>
+
+    <!-- Drawer Footer (Subtotal & Actions) -->
+    <div class="p-6 border-t border-lavo-creamDark bg-lavo-cream space-y-4">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-semibold text-lavo-muted uppercase tracking-wider">Subtotal:</span>
+        <span id="cart-total-price" class="font-serif text-xl font-bold text-lavo-oliveDark">Rp 0</span>
+      </div>
+      <p class="text-[11px] text-lavo-muted">Pajak dan biaya pengiriman dihitung saat proses checkout.</p>
+      
+      <button id="checkout-trigger-btn" onclick="openCheckoutModal()" class="w-full py-4 rounded-xl bg-lavo-olive text-white font-medium text-sm hover:bg-lavo-oliveDark transition duration-300 shadow-md flex items-center justify-center space-x-2 disabled:opacity-40 disabled:cursor-not-allowed">
+        <span>Lanjut ke Pembayaran</span>
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ================= G. CHECKOUT MODAL ================= -->
+  <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-lavo-charcoal/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-lavo-creamDark transform scale-95 transition-transform duration-300" id="checkout-modal-content">
+      
+      <!-- Modal Header -->
+      <div class="p-6 sm:p-8 border-b border-lavo-creamDark flex items-center justify-between sticky top-0 bg-white z-10">
+        <div>
+          <span class="text-[10px] font-bold tracking-widest text-lavo-olive uppercase">Simulasi Checkout</span>
+          <h3 class="font-serif text-2xl font-bold text-lavo-oliveDark">Formulir Pemesanan LAVO</h3>
+        </div>
+        <button onclick="closeCheckoutModal()" class="w-9 h-9 rounded-full bg-lavo-cream hover:bg-lavo-creamDark flex items-center justify-center text-lavo-muted">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <form onsubmit="handlePlaceOrder(event)" class="p-6 sm:p-8 space-y-6">
+        
+        <!-- Customer Info -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-lavo-oliveDark mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-lavo-sageLight text-lavo-olive inline-flex items-center justify-center text-[10px]">1</span>
+            <span>Data Pembeli</span>
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-medium text-lavo-muted mb-1">Nama Lengkap *</label>
+              <input type="text" required id="cust-name" placeholder="Clarissa Salsabila" class="w-full px-3.5 py-2.5 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-lavo-muted mb-1">Alamat Email *</label>
+              <input type="email" required id="cust-email" placeholder="clarissa@gmail.com" class="w-full px-3.5 py-2.5 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipping Address -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-lavo-oliveDark mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-lavo-sageLight text-lavo-olive inline-flex items-center justify-center text-[10px]">2</span>
+            <span>Alamat Pengiriman</span>
+          </h4>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs font-medium text-lavo-muted mb-1">Alamat Lengkap *</label>
+              <textarea required id="cust-address" rows="2" placeholder="Nama Jalan, Nomor Rumah, RT/RW, Kecamatan, Kota, Kode Pos" class="w-full px-3.5 py-2.5 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm"></textarea>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-lavo-muted mb-1">Nomor WhatsApp *</label>
+                <input type="tel" required id="cust-phone" placeholder="08123456789" class="w-full px-3.5 py-2.5 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm" />
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-lavo-muted mb-1">Kurir Pengiriman</label>
+                <select class="w-full px-3.5 py-2.5 rounded-xl bg-lavo-cream border border-lavo-creamDark focus:outline-none focus:border-lavo-olive text-sm">
+                  <option>JNE Regular (Bebas Ongkir)</option>
+                  <option>SiCepat Best</option>
+                  <option>GoSend / GrabExpress Instant</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-lavo-oliveDark mb-3 flex items-center space-x-2">
+            <span class="w-5 h-5 rounded-full bg-lavo-sageLight text-lavo-olive inline-flex items-center justify-center text-[10px]">3</span>
+            <span>Metode Pembayaran</span>
+          </h4>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="payment-options">
+            <label class="border-2 border-lavo-olive bg-lavo-sageLight/40 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer text-center transition">
+              <input type="radio" name="payment" value="QRIS" checked class="hidden" />
+              <i class="fa-solid fa-qrcode text-lavo-olive text-xl mb-1"></i>
+              <span class="text-xs font-bold text-lavo-oliveDark">QRIS Instant</span>
+              <span class="text-[10px] text-lavo-muted">BCA, Gopay, OVO</span>
+            </label>
+
+            <label class="border border-lavo-creamDark rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer text-center hover:border-lavo-sage transition">
+              <input type="radio" name="payment" value="Virtual Account" class="hidden" />
+              <i class="fa-solid fa-building-columns text-lavo-olive text-xl mb-1"></i>
+              <span class="text-xs font-bold text-lavo-oliveDark">Virtual Account</span>
+              <span class="text-[10px] text-lavo-muted">Mandiri, BNI, BRI</span>
+            </label>
+
+            <label class="border border-lavo-creamDark rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer text-center hover:border-lavo-sage transition">
+              <input type="radio" name="payment" value="COD" class="hidden" />
+              <i class="fa-solid fa-truck-ramp-box text-lavo-olive text-xl mb-1"></i>
+              <span class="text-xs font-bold text-lavo-oliveDark">COD Bayar Ditempat</span>
+              <span class="text-[10px] text-lavo-muted">Tunai Kurir</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Order Summary Box -->
+        <div class="bg-lavo-cream rounded-2xl p-5 border border-lavo-creamDark space-y-3">
+          <p class="text-xs font-bold uppercase tracking-wider text-lavo-oliveDark">Ringkasan Pesanan</p>
+          <div id="checkout-summary-items" class="space-y-2 text-xs divide-y divide-lavo-creamDark/60">
+            <!-- Items injected by JS -->
+          </div>
+          <div class="pt-2 border-t border-lavo-creamDark flex justify-between items-center text-sm font-bold text-lavo-oliveDark">
+            <span>Total Pembayaran:</span>
+            <span id="checkout-final-total" class="font-serif text-lg text-lavo-olive">Rp 0</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="place-order-btn" class="w-full py-4 rounded-xl bg-lavo-olive text-white font-semibold text-sm hover:bg-lavo-oliveDark transition duration-300 shadow-lg flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Place Order (Selesaikan Pesanan)</span>
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ================= ORDER SUCCESS MODAL ================= -->
+  <div id="success-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-lavo-charcoal/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center space-y-5 shadow-2xl border border-lavo-creamDark transform scale-95 transition-transform duration-300" id="success-modal-content">
+      <div class="w-16 h-16 rounded-full bg-lavo-sageLight text-lavo-olive flex items-center justify-center text-3xl mx-auto shadow-inner">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <div>
+        <span class="text-xs font-bold tracking-widest text-lavo-olive uppercase">Pemesanan Berhasil</span>
+        <h3 class="font-serif text-2xl font-bold text-lavo-oliveDark mt-1">Terima Kasih atas Pesanan Anda!</h3>
+        <p class="text-xs text-lavo-muted mt-2 leading-relaxed">
+          Pesanan simulasi Anda telah dicatat. Kami telah mengirimkan konfirmasi tanda terima ke email yang Anda daftarkan.
+        </p>
+      </div>
+
+      <div class="bg-lavo-cream p-4 rounded-2xl text-left text-xs space-y-1.5 border border-lavo-creamDark">
+        <div class="flex justify-between"><span class="text-lavo-muted">Nomor Order:</span> <span class="font-mono font-bold text-lavo-oliveDark" id="success-order-id">LAVO-89218</span></div>
+        <div class="flex justify-between"><span class="text-lavo-muted">Penerima:</span> <span class="font-semibold text-lavo-oliveDark" id="success-order-name">-</span></div>
+        <div class="flex justify-between"><span class="text-lavo-muted">Metode:</span> <span class="font-semibold text-lavo-oliveDark" id="success-order-method">QRIS</span></div>
+        <div class="flex justify-between pt-1 border-t border-lavo-creamDark"><span class="font-bold text-lavo-oliveDark">Total:</span> <span class="font-bold text-lavo-olive" id="success-order-total">Rp 0</span></div>
+      </div>
+
+      <button onclick="closeSuccessModal()" class="w-full py-3.5 rounded-xl bg-lavo-olive text-white font-medium text-sm hover:bg-lavo-oliveDark transition">
+        Kembali Berbelanja
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // 1. DATA PRODUK KATALOG (6 Produk Sesuai Ketentuan)
+    const productsData = [
+      {
+        id: 1,
+        name: "Everyday Tote Bag",
+        category: "tote",
+        price: 219000,
+        badge: "Best Seller",
+        image: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=700&q=80",
+        description: "Tote bag kanvas tahan percikan air, memiliki slot laptop 14 inci dan saku botol minum internal untuk rutinitas harian."
+      },
+      {
+        id: 2,
+        name: "Classic Tote Bag",
+        category: "tote",
+        price: 249000,
+        badge: "Signature",
+        image: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=700&q=80",
+        description: "Desain siluet kaku elegan dengan aksen vegan leather premium, ideal untuk rapat formal, kantor, hingga coffee date santai."
+      },
+      {
+        id: 3,
+        name: "Campus Tote Bag",
+        category: "tote",
+        price: 199000,
+        badge: "Popular",
+        image: "https://images.unsplash.com/photo-1597484661643-2f5fef640dd1?auto=format&fit=crop&w=700&q=80",
+        description: "Kapasitas lapang dengan 5 kompartemen buku, binder perkuliahan, alat tulis, dan pengait kunci yang terorganisir rapi."
+      },
+      {
+        id: 4,
+        name: "Daily Laundry Bag",
+        category: "laundry",
+        price: 179000,
+        badge: "Practical",
+        image: "https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?auto=format&fit=crop&w=700&q=80",
+        description: "Tas penampung pakaian kotor berlapisan breathable anti-bau dengan strap bahu ergonomis yang nyaman dibawa ke laundry."
+      },
+      {
+        id: 5,
+        name: "Foldable Laundry Bag",
+        category: "laundry",
+        price: 159000,
+        badge: "Compact",
+        image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=700&q=80",
+        description: "Dapat dilipat menjadi seukuran dompet kecil saat tidak terpakai. Pilihan wajib bagi anak kost dan pelancong fleksibel."
+      },
+      {
+        id: 6,
+        name: "Multi-purpose Bag",
+        category: "multi",
+        price: 289000,
+        badge: "Versatile 3-in-1",
+        image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=700&q=80",
+        description: "Inovasi sistem ritsleting ekspansi yang mengubah tas dari tote bag kasual menjadi duffle gym atau kantong laundry muatan besar."
+      }
+    ];
+
+    // 2. STATE MANAJEMEN KERANJANG BELANJA
+    let cart = [];
+
+    // Helper: Format Rupiah
+    function formatRupiah(amount) {
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0
+      }).format(amount);
+    }
+
+    // 3. RENDER PRODUK KE HALAMAN
+    function renderProducts(filter = 'all') {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = '';
+
+      const filtered = filter === 'all' 
+        ? productsData 
+        : productsData.filter(item => item.category === filter);
+
+      filtered.forEach(product => {
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-3xl overflow-hidden border border-lavo-creamDark hover:shadow-xl transition-all duration-300 flex flex-col group";
+        
+        card.innerHTML = `
+          <!-- Image Container -->
+          <div class="aspect-square bg-lavo-creamDark relative overflow-hidden">
+            <img 
+              src="${product.image}" 
+              alt="${product.name}" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <span class="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-bold text-lavo-olive tracking-wider uppercase shadow-sm">
+              ${product.badge}
+            </span>
+          </div>
+
+          <!-- Content Details -->
+          <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <div class="flex items-start justify-between gap-2">
+                <h3 class="font-serif text-lg font-bold text-lavo-oliveDark group-hover:text-lavo-olive transition-colors">${product.name}</h3>
+                <span class="font-bold text-sm text-lavo-charcoal whitespace-nowrap">${formatRupiah(product.price)}</span>
+              </div>
+              <p class="text-xs text-lavo-muted mt-2 leading-relaxed line-clamp-2">
+                ${product.description}
+              </p>
+            </div>
+
+            <button 
+              onclick="addToCart(${product.id})" 
+              class="w-full py-3 rounded-xl bg-lavo-cream hover:bg-lavo-olive hover:text-white text-lavo-oliveDark text-xs font-bold tracking-wide transition-all duration-300 flex items-center justify-center space-x-2 border border-lavo-creamDark"
+            >
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <span>Add to Cart</span>
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Filter Trigger
+    function filterProducts(category) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-lavo-olive', 'text-white');
+        btn.classList.add('bg-white', 'text-lavo-charcoal');
+      });
+      event.target.classList.remove('bg-white', 'text-lavo-charcoal');
+      event.target.classList.add('bg-lavo-olive', 'text-white');
+      
+      renderProducts(category);
+    }
+
+    // 4. KERANJANG BELANJA (CART) OPERATIONS
+    function addToCart(productId) {
+      const product = productsData.find(p => p.id === productId);
+      if (!product) return;
+
+      const existingIndex = cart.findIndex(item => item.id === productId);
+      if (existingIndex > -1) {
+        cart[existingIndex].qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+
+      updateCartUI();
+      showToast(`"${product.name}" ditambahkan ke keranjang`);
+    }
+
+    function changeQty(productId, delta) {
+      const item = cart.find(p => p.id === productId);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        removeFromCart(productId);
+        return;
+      }
+      updateCartUI();
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      updateCartUI();
+    }
+
+    function getCartTotal() {
+      return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    }
+
+    function getTotalItemsCount() {
+      return cart.reduce((sum, item) => sum + item.qty, 0);
+    }
+
+    // 5. UPDATE TAMPILAN KERANJANG (UI)
+    function updateCartUI() {
+      const badge = document.getElementById('cart-badge');
+      const drawerCount = document.getElementById('drawer-count');
+      const container = document.getElementById('cart-items-container');
+      const totalPriceEl = document.getElementById('cart-total-price');
+      const checkoutBtn = document.getElementById('checkout-trigger-btn');
+
+      const totalItems = getTotalItemsCount();
+      const totalPrice = getCartTotal();
+
+      // Badge Update
+      badge.textContent = totalItems;
+      drawerCount.textContent = totalItems;
+      if (totalItems > 0) {
+        badge.classList.remove('scale-0');
+        badge.classList.add('scale-100');
+        checkoutBtn.removeAttribute('disabled');
+      } else {
+        badge.classList.remove('scale-100');
+        badge.classList.add('scale-0');
+        checkoutBtn.setAttribute('disabled', 'true');
+      }
+
+      // Total Price
+      totalPriceEl.textContent = formatRupiah(totalPrice);
+
+      // Render Item List
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="h-full flex flex-col items-center justify-center text-center p-6 text-lavo-muted space-y-3">
+            <div class="w-16 h-16 rounded-full bg-lavo-cream flex items-center justify-center text-2xl text-lavo-sage">
+              <i class="fa-solid fa-basket-shopping"></i>
+            </div>
+            <p class="font-serif text-base font-bold text-lavo-oliveDark">Keranjang Masih Kosong</p>
+            <p class="text-xs max-w-xs">Pilih tas multifungsi favorit Anda dari katalog untuk mulai berbelanja.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      cart.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = "flex items-center space-x-3.5 bg-lavo-cream p-3.5 rounded-2xl border border-lavo-creamDark";
+        itemEl.innerHTML = `
+          <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-xl object-cover" />
+          <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-bold text-lavo-oliveDark truncate">${item.name}</h4>
+            <p class="text-xs text-lavo-olive font-semibold mt-0.5">${formatRupiah(item.price)}</p>
+            
+            <!-- Quantity Controls -->
+            <div class="flex items-center space-x-2 mt-2">
+              <button onclick="changeQty(${item.id}, -1)" class="w-6 h-6 rounded-lg bg-white border border-lavo-creamDark flex items-center justify-center text-xs hover:bg-lavo-sageLight">
+                -
+              </button>
+              <span class="text-xs font-bold text-lavo-charcoal px-1">${item.qty}</span>
+              <button onclick="changeQty(${item.id}, 1)" class="w-6 h-6 rounded-lg bg-white border border-lavo-creamDark flex items-center justify-center text-xs hover:bg-lavo-sageLight">
+                +
+              </button>
+            </div>
+          </div>
+          <button onclick="removeFromCart(${item.id})" class="p-2 text-lavo-muted hover:text-red-600 transition" title="Hapus">
+            <i class="fa-regular fa-trash-can text-sm"></i>
+          </button>
+        `;
+        container.appendChild(itemEl);
+      });
+    }
+
+    // 6. TOGGLE CART DRAWER
+    function toggleCart() {
+      const drawer = document.getElementById('cart-drawer');
+      const backdrop = document.getElementById('cart-drawer-backdrop');
+
+      const isOpen = !drawer.classList.contains('translate-x-full');
+      if (isOpen) {
+        drawer.classList.add('translate-x-full');
+        backdrop.classList.add('opacity-0', 'pointer-events-none');
+        backdrop.classList.remove('opacity-100', 'pointer-events-auto');
+      } else {
+        drawer.classList.remove('translate-x-full');
+        backdrop.classList.remove('opacity-0', 'pointer-events-none');
+        backdrop.classList.add('opacity-100', 'pointer-events-auto');
+      }
+    }
+
+    // 7. CHECKOUT MODAL LOGIC
+    function openCheckoutModal() {
+      if (cart.length === 0) return;
+      toggleCart(); // close cart drawer
+
+      const modal = document.getElementById('checkout-modal');
+      const content = document.getElementById('checkout-modal-content');
+      const summaryContainer = document.getElementById('checkout-summary-items');
+      const finalTotal = document.getElementById('checkout-final-total');
+
+      summaryContainer.innerHTML = '';
+      cart.forEach(item => {
+        const row = document.createElement('div');
+        row.className = "flex justify-between items-center py-1";
+        row.innerHTML = `
+          <span class="text-lavo-charcoal truncate max-w-[240px]">${item.name} <strong class="text-lavo-muted">× ${item.qty}</strong></span>
+          <span class="font-semibold text-lavo-oliveDark">${formatRupiah(item.price * item.qty)}</span>
+        `;
+        summaryContainer.appendChild(row);
+      });
+
+      finalTotal.textContent = formatRupiah(getCartTotal());
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100', 'pointer-events-auto');
+      content.classList.remove('scale-95');
+      content.classList.add('scale-100');
+    }
+
+    function closeCheckoutModal() {
+      const modal = document.getElementById('checkout-modal');
+      const content = document.getElementById('checkout-modal-content');
+
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.classList.remove('opacity-100', 'pointer-events-auto');
+      content.classList.add('scale-95');
+      content.classList.remove('scale-100');
+    }
+
+    function handlePlaceOrder(e) {
+      e.preventDefault();
+
+      const btn = document.getElementById('place-order-btn');
+      btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i><span>Memproses Pesanan...</span>`;
+      btn.disabled = true;
+
+      // Ambil nilai data formulir
+      const name = document.getElementById('cust-name').value;
+      const payment = document.querySelector('input[name="payment"]:checked').value;
+      const totalFormatted = formatRupiah(getCartTotal());
+      const randomOrderId = "LAVO-" + Math.floor(10000 + Math.random() * 90000);
+
+      setTimeout(() => {
+        btn.innerHTML = `<i class="fa-solid fa-shield-halved"></i><span>Place Order (Selesaikan Pesanan)</span>`;
+        btn.disabled = false;
+
+        closeCheckoutModal();
+
+        // Tampilkan Modal Sukses
+        document.getElementById('success-order-id').textContent = randomOrderId;
+        document.getElementById('success-order-name').textContent = name;
+        document.getElementById('success-order-method').textContent = payment;
+        document.getElementById('success-order-total').textContent = totalFormatted;
+
+        // Reset Cart
+        cart = [];
+        updateCartUI();
+
+        const successModal = document.getElementById('success-modal');
+        const successContent = document.getElementById('success-modal-content');
+        successModal.classList.remove('opacity-0', 'pointer-events-none');
+        successModal.classList.add('opacity-100', 'pointer-events-auto');
+        successContent.classList.remove('scale-95');
+        successContent.classList.add('scale-100');
+      }, 1200);
+    }
+
+    function closeSuccessModal() {
+      const successModal = document.getElementById('success-modal');
+      const successContent = document.getElementById('success-modal-content');
+
+      successModal.classList.add('opacity-0', 'pointer-events-none');
+      successModal.classList.remove('opacity-100', 'pointer-events-auto');
+      successContent.classList.add('scale-95');
+      successContent.classList.remove('scale-100');
+    }
+
+    // 8. NOTIFICATION TOAST
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-message');
+      msg.textContent = message;
+
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 2500);
+    }
+
+    // 9. MOBILE MENU & FORM SUBMIT
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      showToast("Pesan Anda telah terkirim ke tim LAVO");
+      e.target.reset();
+    }
+
+    // Radio payment styling visual helper
+    document.querySelectorAll('#payment-options label').forEach(label => {
+      label.addEventListener('click', () => {
+        document.querySelectorAll('#payment-options label').forEach(l => {
+          l.classList.remove('border-2', 'border-lavo-olive', 'bg-lavo-sageLight/40');
+          l.classList.add('border', 'border-lavo-creamDark');
+        });
+        label.classList.add('border-2', 'border-lavo-olive', 'bg-lavo-sageLight/40');
+        label.classList.remove('border-lavo-creamDark');
+      });
+    });
+
+    // Inisialisasi awal saat halaman siap
+    document.addEventListener('DOMContentLoaded', () => {
+      renderProducts('all');
+      updateCartUI();
+    });
+  </script>
+</body>
+</html>
